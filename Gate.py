@@ -12,7 +12,7 @@ class Gate:
 
         self.table = tb
         self.keys = []
-        for i in range(len(tb[0])):
+        for i in range(len(tb[0])*2):
             self.keys.append(random.randint(1, 100000))
 
     def getKeys(self):
@@ -36,7 +36,10 @@ class Gate:
         for i in range(len(self.table)):
             a = []
             for j in range(len(self.table[i])):
-                a.append(self.encrypt(self.table[i][j], self.keys[j]))
+                if self.table[i][j] == 0:
+                    a.append(self.encrypt(self.table[i][j], self.keys[j]))
+                else:
+                    a.append(self.encrypt(self.table[i][j], self.keys[len(self.table[i]) + j]))
             arr.append(a)
 
         gc = []
@@ -56,7 +59,11 @@ class Gate:
     def getGI(self, inputs):
         arr = inputs[:]
         for i in range(len(arr)):
-            arr[i] = self.encrypt(inputs[i], self.keys[i])
+            if arr[i] == 0:
+                arr[i] = self.encrypt(inputs[i], self.keys[i])
+            else:
+                arr[i] = self.encrypt(inputs[i], self.keys[len(self.table[i]) + i])
+
         return arr
 
     def evaluate(self, gc, gi):
